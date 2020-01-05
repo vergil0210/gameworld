@@ -26,33 +26,43 @@
                     </ul>
                 </div>
             </el-aside>
-
-                <el-container>
-                    <div class="total">
-                    <el-header height="100">
-                        <!-- Header content -->
-                        <div id="headMenu">
-                            <el-menu :default-active="activeIndex" class="front" mode="horizontal" 
-                            background-color="transparent">
-                                <el-menu-item index="1">处理中心</el-menu-item>
-                                <el-submenu index="2">
-                                    <template slot="title">我的工作台</template>
-                                    <el-menu-item index="2-1">选项1</el-menu-item>
-                                    <el-menu-item index="2-2">选项2</el-menu-item>
-                                    <el-menu-item index="2-3">选项3</el-menu-item>                  
-                                </el-submenu>
-                                <el-menu-item index="3" >消息中心</el-menu-item>
-                                <el-menu-item index="4" >消息中心</el-menu-item>
-                            </el-menu> 
+                <div class="total">
+                    <el-main>
+                        <div style="background:#13131357">
+                            <el-carousel  :interval="4000"  class="carouselCss">
+                                <el-carousel-item v-for="(item,index) in photo" :key="index" >
+                                    <el-image :src="item.path" fit="cover" style="width:600px;height:330px"></el-image>
+                                </el-carousel-item>
+                            </el-carousel>
                         </div>
-                    </el-header>
-                    <el-main height="">
-                        <div id="main"> 
-                            <router-view></router-view>
+                        <div>
+                            <h2 style="color:white">特别优惠</h2>
+                            <!-- <table>
+                                <tr v-for="(item,index) in photo" :key="index">
+                                    <td>
+                                        <div class="tableCss">
+                                            <el-image :src="item.path" fit="cover" style="width:400px;height:220px"></el-image>
+                                            <el-tag type="success" effect="dark" style="color: #4e6306;" size="medium ">-50%</el-tag>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+                                </tr>
+                            </table> -->
+                            <div style="background:#13131357">
+                                <el-row :gutter="20" v-for="(item,index) in photo" :key="index">
+                                    <el-col :span="8" v-for="cols in 3" :key="cols">
+                                        <div class="tableCss">
+                                            <el-image :src="item.path" fit="cover" style="width:300px;height:165px"></el-image>
+                                            <el-tag type="success" effect="dark" style="color: #4e6306;" size="medium ">-50%</el-tag>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </div>
                         </div>
                     </el-main>
-                    </div>
-                </el-container>
+                </div>
         </el-container>
     </div>
 </template>
@@ -61,24 +71,44 @@ export default {
     data() {
         return {
             store: ['商店1','商店2','商店3'],
-            category: ['休闲','体育','冒险','动作','策略','竞速']
+            category: ['休闲','体育','冒险','动作','策略','竞速'],
+            photo : [
+                {path: require('../../assets/img/展示图片1.jpg'), name: '绝地武士'},
+                {path: require('../../assets/img/展示图片2.jpg'), name: '怪物猎人：冰原'},
+                {path: require('../../assets/img/展示图片3.jpg'), name: '人类必须死'},
+                {path: require('../../assets/img/展示图片4.jpg'), name: '攻城'},
+                {path: require('../../assets/img/展示图片5.jpg'), name: '打飞机'},
+            ]
         }
     },
 }
 </script>
 
-<style>
-.front {
+<style scoped>
+.whitefont {
     color: white
 }
-
-.total {
-    background-color: #303030;
+.carouselCss {
+    width:600px;
+    height:330px;
+    margin: auto 200px;
+    padding: 20px;
 }
+.tableCss {
+    background-clip: padding-box;
+    margin: auto auto;
+    width: 300px;
+    height: 200px;
+    padding: 0px 0px 0px 0px;
+    background: #13131357;
+    box-shadow: 0 0 25px #13131357;
+    
+}
+
 
 a {
     font-weight: normal;
-    color: rgb(4, 115, 219);
+    color: rgb(92, 176, 255);
     text-decoration: none;
     
 }
@@ -89,6 +119,9 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+#headMenu ul li ,#headMenu ul li div{
+    color: white
+}
 
 #asideMenu {
     background-clip: padding-box;
@@ -98,12 +131,12 @@ ul {
     font-family: -webkit-pictograph;
     color: antiquewhite
 }
-#main {
-    width: 2000px;
+/* #main {
+    width: 1000px;
     height: 1000px;
     background-color: black
 
-}
+} */
 #h3 {
     font-size: large
 }

@@ -8,7 +8,7 @@
             <el-divider/>
             <br/>
             <div class="line">
-                <router-link to="Menu">主页</router-link><br/>
+                <router-link to="homePage">主页</router-link><br/>
                 <router-link to="">登录</router-link><br/>
                 <router-link to="">成为会员</router-link><br/>
             </div>
@@ -29,7 +29,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 div {
     font-family: -webkit-pictograph;

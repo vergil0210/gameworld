@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Menu from '@/components/Menu'
+import homePage from '@/components/HomePage'
 import headTop from '@/components/MenuTemplate/headTop'
 import index from '@/components/Index'
 
@@ -16,9 +16,9 @@ export default new Router({
       component: index
     },
     {
-      path: '/menu',
-      name: 'Menu',
-      component: Menu,
+      path: '/homePage',
+      name: 'HomePage',
+      component: homePage,
       children: [
         {
           path: '/',
