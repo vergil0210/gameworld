@@ -20,7 +20,7 @@
                         <li>
                             <h3>按类型浏览</h3>
                         </li>
-                        <li v-for="(item,index) in category" :key="index">
+                        <li v-for="(item,index) in getCategories" :key="index">
                             <router-link to="">{{item}}</router-link>
                         </li>
                     </ul>
@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             store: ['商店1','商店2','商店3'],
-            category: ['休闲','体育','冒险','动作','策略','竞速'],
+            category: [],
             photo : [
                 {path: require('../../assets/img/展示图片1.jpg'), name: '绝地武士'},
                 {path: require('../../assets/img/展示图片2.jpg'), name: '怪物猎人：冰原'},
@@ -80,6 +80,43 @@ export default {
                 {path: require('../../assets/img/展示图片5.jpg'), name: '打飞机'},
             ]
         }
+    },
+    methods: {
+        // getCategories: function(){
+        // // 为给定 ID 的 user 创建请求
+        //     var categories = [];
+        //     var _this = this;
+        //     this.$axios.get('http://localhost:8080/homePage/getCategories')
+        //         .then(function (response) {
+        //             console.log('response.data'+response.data);
+        //             categories = response.data;
+        //             _this.category = response.data;
+        //         })
+        //         .catch(function (error) {
+        //             console.log(error);
+        //     });
+        //     // console.log(categories);
+        //     // debugger;
+        //     return categories; 
+        // } 
+    },
+    computed: {
+        getCategories: function(){
+        // 为给定 ID 的 user 创建请求
+            this.$axios.get('http://localhost:8080/homePage/getCategories')
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+            });
+            // console.log(categories); 
+        } 
+    },
+    created() {
+        this.getCategories();
+        console.log("created"+this.category)
     },
 }
 </script>
