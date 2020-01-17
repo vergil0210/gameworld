@@ -24,11 +24,11 @@ export default {
   methods: {
     checkToLogin(){
       this.isLogin = true;
-      this.$router.push('login');
+      this.$router.push('/regLogin');
     },
     checkToRegister(){
       this.isLogin = false;
-      this.$router.push('register');
+      this.$router.push('/regLogin/register');
     },
   },
 }

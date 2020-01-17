@@ -3,9 +3,9 @@
     <div class="top">
       <div class="rightTop">
           <span class="fontCss">欢迎来到游戏世界</span>
-          <router-link to="/regLogin">请登录</router-link>
+          <router-link to="/regLogin" @click="checkToLogin">请登录</router-link>
           <span class="fontCss">|</span>
-          <router-link to="/regLogin/register">免费注册</router-link>
+          <router-link to="/regLogin/register" @click="checkToRegister">免费注册</router-link>
       </div>
       <div class="leftTop">
           <el-image :src="logoPath" id="logo" style="width: 30px;height: 30px;" @click="skipHomePage"></el-image>
@@ -25,12 +25,21 @@ export default {
   name: 'App',
   data() {
     return {
+      isLogin: true,
       logoPath: require("./assets/img/Logo1.png"),
     }
   },
   methods: {
     skipHomePage(){
           this.$router.push("/homePage");
+    },
+    checkToLogin(){
+      this.isLogin = true;
+      this.$router.push('/regLogin');
+    },
+    checkToRegister(){
+      this.isLogin = false;
+      this.$router.push('/regLogin/register');
     },
   },
 }

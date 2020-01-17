@@ -20,7 +20,7 @@
                         <li>
                             <h3>按类型浏览</h3>
                         </li>
-                        <li v-for="(item,index) in getCategories" :key="index">
+                        <li v-for="(item,index) in categories" :key="index">
                             <router-link to="">{{item}}</router-link>
                         </li>
                     </ul>
@@ -28,39 +28,7 @@
             </el-aside>
                 <div class="total">
                     <el-main>
-                        <div style="background:#13131357">
-                            <el-carousel  :interval="4000"  class="carouselCss">
-                                <el-carousel-item v-for="(item,index) in photo" :key="index" >
-                                    <el-image :src="item.path" fit="cover" style="width:600px;height:330px"></el-image>
-                                </el-carousel-item>
-                            </el-carousel>
-                        </div>
-                        <div>
-                            <h2 style="color:white">特别优惠</h2>
-                            <!-- <table>
-                                <tr v-for="(item,index) in photo" :key="index">
-                                    <td>
-                                        <div class="tableCss">
-                                            <el-image :src="item.path" fit="cover" style="width:400px;height:220px"></el-image>
-                                            <el-tag type="success" effect="dark" style="color: #4e6306;" size="medium ">-50%</el-tag>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                </tr>
-                            </table> -->
-                            <div style="background:#13131357">
-                                <el-row :gutter="20" v-for="(item,index) in photo" :key="index">
-                                    <el-col :span="8" v-for="cols in 3" :key="cols">
-                                        <div class="tableCss">
-                                            <el-image :src="item.path" fit="cover" style="width:300px;height:165px"></el-image>
-                                            <el-tag type="success" effect="dark" style="color: #4e6306;" size="medium ">-50%</el-tag>
-                                        </div>
-                                    </el-col>
-                                </el-row>
-                            </div>
-                        </div>
+                        <router-view></router-view>
                     </el-main>
                 </div>
         </el-container>
@@ -71,7 +39,7 @@ export default {
     data() {
         return {
             store: ['商店1','商店2','商店3'],
-            category: [],
+            categories: ['动作','冒险','模拟','角色扮演','休闲','沙盒'],
             photo : [
                 {path: require('../../assets/img/展示图片1.jpg'), name: '绝地武士'},
                 {path: require('../../assets/img/展示图片2.jpg'), name: '怪物猎人：冰原'},
@@ -81,43 +49,7 @@ export default {
             ]
         }
     },
-    methods: {
-        // getCategories: function(){
-        // // 为给定 ID 的 user 创建请求
-        //     var categories = [];
-        //     var _this = this;
-        //     this.$axios.get('http://localhost:8080/homePage/getCategories')
-        //         .then(function (response) {
-        //             console.log('response.data'+response.data);
-        //             categories = response.data;
-        //             _this.category = response.data;
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error);
-        //     });
-        //     // console.log(categories);
-        //     // debugger;
-        //     return categories; 
-        // } 
-    },
-    computed: {
-        getCategories: function(){
-        // 为给定 ID 的 user 创建请求
-            this.$axios.get('http://localhost:8080/homePage/getCategories')
-                .then(function (response) {
-                    console.log(response.data);
-                    return response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-            });
-            // console.log(categories); 
-        } 
-    },
-    created() {
-        this.getCategories();
-        console.log("created"+this.category)
-    },
+    
 }
 </script>
 
@@ -125,12 +57,7 @@ export default {
 .whitefont {
     color: white
 }
-.carouselCss {
-    width:600px;
-    height:330px;
-    margin: auto 200px;
-    padding: 20px;
-}
+
 .tableCss {
     background-clip: padding-box;
     margin: auto auto;
