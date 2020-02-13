@@ -1,8 +1,8 @@
 <template>
     <div class="center">
-        
+
         <img src="../assets/img/Logo.png" alt="Logo">
-       
+
         <div>
             <h1>Welcome to Game World</h1>
             <el-divider/>
@@ -13,7 +13,7 @@
                 <router-link to="">成为会员</router-link><br/>
             </div>
         </div>
-        
+
     </div>
 
 
@@ -23,7 +23,7 @@
 export default {
     data() {
         return {
-            
+
         }
     },
 }

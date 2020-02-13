@@ -4,8 +4,8 @@
         <h3 class="login_title" v-if="isLogin">用户登录</h3>
         <h3 class="login_title" v-else>用户注册</h3>
         <el-button-group class="regLogin_button_group">
-                <el-button class="regLogin_button" @click="checkToLogin">登录</el-button>
-                <el-button class="regLogin_button" @click="checkToRegister">注册</el-button>
+                <el-button class="regLogin_button" @click="toLogin">登录</el-button>
+                <el-button class="regLogin_button" @click="toRegister">注册</el-button>
         </el-button-group>
         <router-view></router-view>
     </div>
@@ -13,24 +13,32 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
   data () {
     return {
-      isLogin: true,
       //style绑定，向上浮动
-      floatUp: 'margin: 100px auto'
+      floatUp: 'margin: 100px auto',
     }
   },
   methods: {
-    checkToLogin(){
-      this.isLogin = true;
+    ...mapMutations(["checkToLogin","checkToRegister"]),
+    toLogin(){
+      this.checkToLogin();
       this.$router.push('/regLogin');
     },
-    checkToRegister(){
-      this.isLogin = false;
+    toRegister(){
+      this.checkToRegister();
       this.$router.push('/regLogin/register');
     },
   },
+  computed: {
+    ...mapState(['regLogin']),
+    isLogin: function () {
+      return this.regLogin.isLogin;
+    }
+  }
 }
 </script>
 
@@ -44,7 +52,7 @@ export default {
     background: #042240ad;
     /* border: 1px solid #FAFBFC; */
     box-shadow: 0 0 25px #000000;
-    
+
 }
 .regLogin_button{
   width: 50%;
@@ -60,7 +68,6 @@ export default {
   color: white;
 }
 .backgroundCss{
-  background-image: '../assets/regLogin-background.jpg';
   background: no-repeat center top;
   background-size: contain;
 }

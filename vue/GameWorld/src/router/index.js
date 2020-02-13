@@ -7,11 +7,11 @@ import headTop from '@/components/MenuTemplate/headTop'
 import login from '@/components/RegLogin/Login'
 import register from '@/components/RegLogin/register'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   base: '/gameWorld/',
-  
+
   routes: [
     {
       path: '/',
