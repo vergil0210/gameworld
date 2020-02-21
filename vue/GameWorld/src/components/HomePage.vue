@@ -57,8 +57,8 @@ h1 {
 
 .HomePage_background {
     background: #060c276b;
-    height: 1000px;
-    overflow: auto;
+    /*height: 1000px;*/
+    overflow: hidden;
 }
 
 #logo {

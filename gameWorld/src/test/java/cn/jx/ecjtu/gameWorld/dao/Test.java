@@ -24,8 +24,5 @@ public class Test {
 //        System.out.println(all);
         List allNames = categoryDao.findAllNames();
         System.out.println(allNames);
-
     }
-
-
 }

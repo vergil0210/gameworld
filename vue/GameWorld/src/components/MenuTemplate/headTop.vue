@@ -49,12 +49,12 @@ export default {
             ]
         }
     },
-    
+
 }
 </script>
 
 <style scoped>
-.whitefont {
+.whiteFont {
     color: white
 }
 
@@ -66,7 +66,7 @@ export default {
     padding: 0px 0px 0px 0px;
     background: #13131357;
     box-shadow: 0 0 25px #13131357;
-    
+
 }
 
 
@@ -74,7 +74,7 @@ a {
     font-weight: normal;
     color: rgb(92, 176, 255);
     text-decoration: none;
-    
+
 }
 a:hover {
     color: white

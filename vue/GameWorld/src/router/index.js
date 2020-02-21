@@ -6,6 +6,7 @@ import regLogin from '@/components/RegLogin'
 import headTop from '@/components/MenuTemplate/headTop'
 import login from '@/components/RegLogin/Login'
 import register from '@/components/RegLogin/register'
+import welcome from "@/components/MenuTemplate/welcome";
 
 Vue.use(Router);
 
@@ -31,7 +32,14 @@ export default new Router({
         {
           path: '/',
           name: 'headTop',
-          component: headTop
+          component: headTop,
+          children: [
+            {
+              path: '/',
+              name: 'welcome',
+              component: welcome
+            }
+          ]
         }
       ]
     },
