@@ -39,7 +39,7 @@ export default {
         }
     },
     mounted () {
-        this.axoisTest()
+        this.axoisTest();
     }
 
 }
