@@ -5,6 +5,7 @@ import home from '@/components/Home'
 import addProduct from '@/components/productControl/AddProduct'
 import deleteProduct from '@/components/productControl/DeleteProduct'
 import onSale from '@/components/productControl/OnSale'
+import addType from '@/components/productControl/AddType'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
         },
         {
           name: deleteProduct,
+          path: '/',
+          component: deleteProduct
+        },
+        {
+          name: deleteProduct,
           path: 'deleteProduct',
           component: deleteProduct
         },
@@ -34,6 +40,10 @@ export default new Router({
           name: onSale,
           path: 'onSale',
           component: onSale
+        },{
+          name: addType,
+          path: 'addType',
+          component: addType
         }
       ]
     },

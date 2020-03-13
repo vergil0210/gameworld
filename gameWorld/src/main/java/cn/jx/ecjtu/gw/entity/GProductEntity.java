@@ -1,29 +1,30 @@
 package cn.jx.ecjtu.gw.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 
-/**
- * @author Administrator
- */
 @Entity
-@Table(name = "g_product", schema = "game_world")
+@Table(name = "g_product", schema = "game_world", catalog = "")
 public class GProductEntity {
     private int productId;
     private String name;
     private String desc;
     private double originalPrice;
     private Integer salesVolume;
-    private String developers;
+    private String developer;
     private String publisher;
     private Double promotePrice;
-    private int categoryId;
     private byte isOnSale;
     private byte isHot;
     private byte showInFront;
+    private Timestamp publishDate;
+    private Set<GTypeEntity> types;
 
     @Id
     @Column(name = "product_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getProductId() {
         return productId;
     }
@@ -43,7 +44,7 @@ public class GProductEntity {
     }
 
     @Basic
-    @Column(name = "desc")
+    @Column(name = "description")
     public String getDesc() {
         return desc;
     }
@@ -73,13 +74,13 @@ public class GProductEntity {
     }
 
     @Basic
-    @Column(name = "developers")
-    public String getDevelopers() {
-        return developers;
+    @Column(name = "developer")
+    public String getDeveloper() {
+        return developer;
     }
 
-    public void setDevelopers(String developers) {
-        this.developers = developers;
+    public void setDeveloper(String developer) {
+        this.developer = developer;
     }
 
     @Basic
@@ -100,16 +101,6 @@ public class GProductEntity {
 
     public void setPromotePrice(Double promotePrice) {
         this.promotePrice = promotePrice;
-    }
-
-    @Basic
-    @Column(name = "category_id")
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
     }
 
     @Basic
@@ -142,6 +133,28 @@ public class GProductEntity {
         this.showInFront = showInFront;
     }
 
+    @Basic
+    @Column(name = "publish_date")
+    public Timestamp getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Timestamp publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    @ManyToMany(targetEntity = GTypeEntity.class)
+    @JoinTable(name = "g_product__type"
+            ,joinColumns = @JoinColumn(name = "g_product_id")
+            ,inverseJoinColumns = @JoinColumn(name = "g_type_id"))
+    public Set<GTypeEntity> getTypes() {
+        return types;
+    }
+
+    public void setTypes(Set<GTypeEntity> types) {
+        this.types = types;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -149,20 +162,22 @@ public class GProductEntity {
         GProductEntity that = (GProductEntity) o;
         return productId == that.productId &&
                 Double.compare(that.originalPrice, originalPrice) == 0 &&
-                categoryId == that.categoryId &&
                 isOnSale == that.isOnSale &&
                 isHot == that.isHot &&
                 showInFront == that.showInFront &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(desc, that.desc) &&
                 Objects.equals(salesVolume, that.salesVolume) &&
-                Objects.equals(developers, that.developers) &&
+                Objects.equals(developer, that.developer) &&
                 Objects.equals(publisher, that.publisher) &&
-                Objects.equals(promotePrice, that.promotePrice);
+                Objects.equals(promotePrice, that.promotePrice) &&
+                Objects.equals(publishDate, that.publishDate) &&
+                Objects.equals(types,that.types);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, desc, originalPrice, salesVolume, developers, publisher, promotePrice, categoryId, isOnSale, isHot, showInFront);
+        return Objects.hash(productId, name, desc, originalPrice, salesVolume, developer, publisher, promotePrice, isOnSale, isHot, showInFront, publishDate);
     }
+
 }

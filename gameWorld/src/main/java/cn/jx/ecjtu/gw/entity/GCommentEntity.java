@@ -7,17 +7,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "g_comment", schema = "game_world", catalog = "")
 public class GCommentEntity {
-    private Object commentId;
+    private int commentId;
     private String content;
     private Timestamp commentTime;
 
     @Id
     @Column(name = "comment_id")
-    public Object getCommentId() {
+    public int getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Object commentId) {
+    public void setCommentId(int commentId) {
         this.commentId = commentId;
     }
 

@@ -52,7 +52,7 @@
     },
     methods: {
       submitClick() {
-
+        this.$router.push({path: '/home'});
       }
     }
   }

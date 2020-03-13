@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author Administrator
  */
 @Entity
-@Table(name = "g_user", schema = "game_world")
+@Table(name = "g_user", schema = "game_world", catalog = "")
 public class GUserEntity {
     private int userId;
     private String username;

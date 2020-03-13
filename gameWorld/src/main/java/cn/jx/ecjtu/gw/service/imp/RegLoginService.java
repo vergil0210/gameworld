@@ -1,4 +1,4 @@
-package cn.jx.ecjtu.gw.service;
+package cn.jx.ecjtu.gw.service.imp;
 
 import org.apache.catalina.User;
 

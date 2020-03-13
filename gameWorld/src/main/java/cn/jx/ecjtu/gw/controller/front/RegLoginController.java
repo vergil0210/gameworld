@@ -1,4 +1,4 @@
-package cn.jx.ecjtu.gw.controller;
+package cn.jx.ecjtu.gw.controller.front;
 
 import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.GetMapping;
