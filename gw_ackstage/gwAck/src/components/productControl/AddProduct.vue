@@ -132,7 +132,7 @@
         this.axios.get("product/getAllTypes")
           .then(body => {
             _this.gameType = body.data;
-            // console.log(_this.gameType);
+            console.log(body.data);
           }).catch(function (error) {
           console.log(error);
         });
@@ -141,6 +141,7 @@
         let _this = this;
         this.axios.get("product/getPublishers")
           .then(body => {
+            console.log(body.data)
             for (var i=0;i<body.data.length;i++){
               _this.publishers.push({"value":body.data[i]});
             }

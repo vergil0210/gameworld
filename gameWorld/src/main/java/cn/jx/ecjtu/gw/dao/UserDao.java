@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<GUserEntity,Integer>, JpaSpecificationExecutor<GUserEntity> {
+
+    GUserEntity findByUsername(String username);
 }

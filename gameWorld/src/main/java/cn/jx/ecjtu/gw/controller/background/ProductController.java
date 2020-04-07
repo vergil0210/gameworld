@@ -36,6 +36,10 @@ public class ProductController {
         System.out.println("paramName:" + paramName);
         return paramName;
     }
+    @GetMapping("getAllNames")
+    public List<String> getAllNames() {
+        return productService.findAllNames();
+    }
 
     @GetMapping("/getAllTypes")
     public String[] getAllTypes(){
@@ -87,7 +91,6 @@ public class ProductController {
     }
     @PostMapping("updateProduct")
     public String updateProduct(@RequestBody List<ProductModel> productModels){
-
         return productService.updateProducts(productModels);
     }
 
@@ -95,6 +98,7 @@ public class ProductController {
     public String addType(@RequestBody TypeModel type){
         return typeService.addType(type.getType());
     }
+
 
 
 }

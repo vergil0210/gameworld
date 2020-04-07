@@ -16,38 +16,7 @@
     </div>
     <div>
       <el-card shadow="never" >
-        <el-table
-          :data="formData"
-          style="width: 100%"
-          :row-class-name="tableRowClassName"
-          border>
-          <el-table-column label="编号"  align="center" width="200px">
-            <template slot-scope="scope">{{ scope.row.id + 1 }}</template>
-          </el-table-column>
-          <el-table-column
-            prop="type"
-            label="类型"
-            align="center"
-            width="200px">
-          </el-table-column>
-          <el-table-column
-            prop="number"
-            label="游戏数量"
-            align="center">
-          </el-table-column>
-          <el-table-column label="标签" width="300" align="center" >
-            <template slot-scope="scope">
-              <p>隐藏类型：
-                <el-switch
-                  @change="handlePublishStatusChange(scope.$index, scope.row)"
-                  :active-value="1"
-                  :inactive-value="0"
-                  v-model="scope.row.publishStatus">
-                </el-switch>
-              </p>
-            </template>
-          </el-table-column>
-        </el-table>
+        <span>已有的游戏类型 {{gameType}}</span>
       </el-card>
     </div>
   </div>
@@ -58,9 +27,7 @@
       name: "AddType",
       data() {
         return {
-          formData: [
-            { type: '动作', number: '100' }
-          ]
+          gameType: []
         }
       },
       methods: {
@@ -79,14 +46,14 @@
                   });
                 console.log(msg);
                 if (!msg=='添加成功'){
-                  this.$message.error('添加失败');
+                  _this.$message.error('添加失败');
                 }else {
                   this.$message({
                     type: 'success',
                     message: '您添加的类型是: ' + value
                   });
                 }
-
+                _this.$router.go(0);
               }).catch(() => {
                 this.$message({
                   type: 'info',
@@ -94,6 +61,7 @@
                 });
               });
             }
+
           },
         //查询结果table的回调方法
         tableRowClassName({row, rowIndex}) {
@@ -105,7 +73,20 @@
           }
           return '';
         },
-      }
+        getTypes() {
+          let _this = this;
+          this.axios.get("product/getAllTypes")
+            .then(body => {
+              _this.gameType = body.data;
+              console.log(body.data);
+            }).catch(function (error) {
+            console.log(error);
+          });
+        }
+      },
+      mounted() {
+        this.getTypes();
+      },
     }
 </script>
 

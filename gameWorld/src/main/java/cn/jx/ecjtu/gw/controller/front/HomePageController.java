@@ -13,7 +13,6 @@ public class HomePageController {
     @Autowired
     ITypeService typeService;
 
-
     /**
      * @return 返回所有游戏类型的集合
      */

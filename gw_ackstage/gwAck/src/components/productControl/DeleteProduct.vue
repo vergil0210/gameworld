@@ -316,8 +316,15 @@
         this.axios.post('/product/deleteOneByName',{
           product: row
         }).then(function (response) {
-          msg = response.data;
-          _this.tableData.splice(index);
+          if (response.data === '') {
+            _this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+          }else {
+            _this.$message.error(response.data)
+          }
+          _this.row.splice(index);
           console.log(msg)
         })
           .catch(function (error) {

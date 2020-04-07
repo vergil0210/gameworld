@@ -22,4 +22,5 @@ public interface ProductDao extends JpaSpecificationExecutor<GProductEntity>, Jp
 
     GProductEntity findByName(String name);
 
+
 }

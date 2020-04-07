@@ -247,6 +247,22 @@
         this.row_index = row.id;
         console.log(this.gameData[this.row_index]);
       },
+      handleClick(row) {
+        this.axios.post('/product/updateProduct',
+          [row]
+        ).then(function (response) {
+          _this.$message({
+            type: 'success',
+            message: '修改成功！'
+          })
+        })
+          .catch(function (error) {
+            _this.$message({
+              type: 'warning',
+              message: '对不起，修改失败。如核对修改信息无误，请联系管理员'
+            })
+          });
+      },
       toggleSelection(rows){
         this.stopToggleSelection = false;
         // this.$refs.multipleTable.toggleRowSelection(row); 改变选矿的选择状态
@@ -279,9 +295,6 @@
                 message: '对不起，修改失败。如核对修改信息无误，请联系管理员'
               })
             });
-          // rows.forEach(row => {
-          //
-          // });
         } else {
           this.$refs.multipleTable.clearSelection();
         }

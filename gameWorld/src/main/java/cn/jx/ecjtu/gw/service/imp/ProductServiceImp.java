@@ -185,9 +185,9 @@ public class ProductServiceImp implements IProductService {
             productDao.delete(entity);
         } catch (RuntimeException e){
             e.printStackTrace();
-            return "delete failed";
+            return "删除失败，该游戏可能已被其他用户购买，非特殊情况请建议使用下线功能代替删除";
         }
-        return "delete success";
+        return "";
     }
 
     @Override
@@ -208,6 +208,16 @@ public class ProductServiceImp implements IProductService {
         }
 
         return "修改成功";
+    }
+
+    @Override
+    public List<String> findAllNames() {
+        List<GProductEntity> entities = productDao.findAll();
+        List<String> names = new ArrayList<>(entities.size());
+        for (GProductEntity entity : entities) {
+            names.add(entity.getName());
+        }
+        return names;
     }
 
 

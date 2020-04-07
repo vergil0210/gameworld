@@ -58,11 +58,6 @@
         @row-click = "onRowClick"
         border>
         <el-table-column
-          type="selection"
-          width="60"
-          align="center">
-        </el-table-column>
-        <el-table-column
           label="序号"
           width="50px"
           type="index"
@@ -86,9 +81,18 @@
         </el-table-column>
         <el-table-column
           prop="products"
+          label="购买游戏"
+          align="center"
+          width="240px">
+          <template slot-scope="scope">
+            <div v-html="productNames(scope.row.products)"> </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="products"
           label="订单金额"
           align="center"
-          width="160px">
+          width="140px">
           <template slot-scope="scope">
             {{ amount(scope.row.products)}}
           </template>
@@ -98,15 +102,11 @@
           label="订单状态" align="center">
         </el-table-column>
         <el-table-column
-          prop="payPattern"
-          label="订单状态" align="center">
-        </el-table-column>
-        <el-table-column
           label="操作"
-          align="center">
+          align="center"
+          width="160px">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="deleteRow(scope.row,scope.$index,tableData)" type="text" size="small">删除</el-button>
-            <el-button @click.native.prevent="closeRow(scope.row,scope.$index,tableData)" type="text" size="small">关闭订单</el-button>
+            <el-button @click="openDialog(scope.row)" type="primary" size="small" plain>详细信息</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,18 +119,69 @@
           :current-page="currentPage">
         </el-pagination>
       </div>
-      <div style="text-align: left">
-        <el-select v-model="operate"  placeholder="选择批量操作" clearable>
-          <el-option
-            v-for="item in operates"
-            :key="item"
-            :label="item"
-            :value="item">
-          </el-option>
-        </el-select>
-        <el-button @click="execute()" type="primary">执行</el-button>
-      </div>
     </el-card>
+    <el-dialog :visible.sync="dialogVisible" title="订单详细信息">
+      <el-card shadow="never" style="padding-bottom: 10px;">
+        <el-table :data="dialogTable" border style="width: 100%">
+          <el-table-column prop="name" label="游戏名称" align="center" width="180px"/>
+          <el-table-column prop="originalPrice" label="价格" align="center">
+            <template slot-scope="scope">
+              {{scope.row.originalPrice}}￥
+            </template>
+          </el-table-column>
+          <el-table-column label="数量" align="center">
+            <template slot-scope="scope">
+              1
+            </template>
+          </el-table-column>
+          <el-table-column prop="originalPrice" label="小计" align="center">
+            <template slot-scope="scope">
+              {{scope.row.originalPrice}}￥
+            </template>
+          </el-table-column>
+        </el-table>
+        <span style="float: right;font-size: 16px">
+          总计： <span style="color: red">{{ amount(dialogTable) }}</span>
+        </span>
+      </el-card>
+      <br/>
+      <br/>
+      <el-card shadow="never">
+        <span style="font-size:  16px"> 订单信息 </span>
+        <div class="form-container-border">
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">服务单号</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.orderId}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">申请状态</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.status}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">创建时间</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.createTime}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">用户名</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.user.username}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">服务单号</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.orderId}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="form-border form-left-bg font-small">申请原因</el-col>
+            <el-col class="form-border font-small" :span="18">{{dialogOrder.returnReason ? dialogOrder.returnReason : '未填写原因'}}</el-col>
+          </el-row>
+        </div>
+        <br/>
+        <div style="text-align: center">
+          <el-button type="primary" plain @click="agreeReturn()">同意退款</el-button>
+          <el-button type="warning" plain @click="refuseReturn()">拒绝退款</el-button>
+        </div>
+      </el-card>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -149,14 +200,19 @@
           size: 3
         },
         status: [
-          '待付款','已完成','已关闭'
+          '待付款','正在处理','拒绝退款','退款申请中','已退款','订单已关闭'
         ],
         payPattern: ['支付宝','微信','银行卡'],
         tableData: [],
         currentPage: 0,
         operates: ['删除订单','关闭订单'],
         operate: '',
-        deleteSuccess: false
+        deleteSuccess: false,
+        // dialog
+        dialogTable: [],
+        dialogVisible: false,
+        dialogTableVisible: false,
+        dialogOrder: {user: {username: ''}}
       }
     },
     methods: {
@@ -164,9 +220,11 @@
       handleSearchList() {
         //展开表格
         let _this = this;
-        this.axios.post('/order/searchOrders',_this.tempList)
+        this.axios.post('/order/searchReturnOrders',_this.tempList)
           .then(function (response) {
+            console.log('====================search data====================')
             console.log(response)
+            console.log('====================search data====================')
           _this.tableData = response.data
         })
           .catch(function (error) {
@@ -191,7 +249,14 @@
         for (let product of products) {
           price += product.originalPrice
         }
-        return price + '元';
+        return '￥'+price;
+      },
+      productNames(products) {
+        let gameNames = ''
+        for (let product of products) {
+          gameNames = gameNames + '<br/>' +product.name
+        }
+        return gameNames
       },
       handleCurrentChange(val) {
         this.tempList.page = val-1;
@@ -207,7 +272,6 @@
         let _this = this;
         this.axios.post('/order/deleteOne',order)
           .then(function (response) {
-
             if (response.data === '') {
               _this.$message({
                 message: '删除成功',
@@ -244,7 +308,7 @@
           })
           .catch(function (error) {
             console.log(error);
-            this.$message.error("修改出错");
+            _this.$message.error("修改出错");
           });
       },
       execute(){
@@ -257,6 +321,56 @@
         }else if (this.operate === '关闭订单'){
 
         }
+      },
+      openDialog(row) {
+        this.dialogVisible = true
+        this.dialogOrder = row
+        this.dialogTable = row.products
+        console.log({"dialogTable: " : this.dialogOrder})
+      },
+      refuseReturn(){
+        let _this = this
+        this.axios.post('/order/refuseOrder',
+          _this.dialogOrder
+        ).then(function (response) {
+          if (response.data === ''){
+            _this.$message({
+              type: 'success',
+              message: '已拒绝退款'
+            })
+            _this.dialogOrder.status = "拒绝退款"
+            _this.dialogVisible = false
+          }else {
+            _this.$message.error(response.data)
+          }
+        }).catch(function (error) {
+            _this.$message({
+              type: 'warning',
+              message: '对不起，修改失败。如核对修改信息无误，请联系管理员'
+            })
+          });
+      },
+      agreeReturn(){
+        let _this = this
+        this.axios.post('/order/agreeOrder',
+          _this.dialogOrder
+        ).then(function (response) {
+          if (response.data === ''){
+            _this.$message({
+              type: 'success',
+              message: '退款成功'
+            })
+            _this.dialogOrder.status = "已退款"
+            _this.dialogVisible = false
+          }else {
+            _this.$message.error(response.data)
+          }
+        }).catch(function (error) {
+          _this.$message({
+            type: 'warning',
+            message: '对不起，退款失败。如核对修改信息无误，请联系管理员'
+          })
+        });
       }
     },
     computed: {
@@ -269,5 +383,18 @@
   .page {
     text-align: center;
     padding-top: 20px;
+  }
+  .form-container-border {
+    border-left: 1px solid #DCDFE6;
+    border-top: 1px solid #DCDFE6;
+    margin-top: 15px;
+  }
+  .form-border {
+    border-right: 1px solid #DCDFE6;
+    border-bottom: 1px solid #DCDFE6;
+    padding: 10px;
+  }
+  .form-left-bg {
+    background: #F2F6FC;
   }
 </style>

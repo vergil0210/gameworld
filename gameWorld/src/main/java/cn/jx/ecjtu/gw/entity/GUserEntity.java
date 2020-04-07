@@ -13,7 +13,7 @@ public class GUserEntity {
     private String username;
     private String password;
     private Double balance;
-    private int phoneNumber;
+    private String phoneNumber;
     private String email;
 
     @Id
@@ -58,11 +58,11 @@ public class GUserEntity {
 
     @Basic
     @Column(name = "phone_number")
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

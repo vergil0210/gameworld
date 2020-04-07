@@ -11,8 +11,8 @@
         <el-alert v-if="isLoginFail" type="error" title="登录失败，账号密码不符请重新确认" closable show-icon></el-alert>
         <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
                  label-width="0px" ref="loginForm">
-          <el-form-item prop="username">
-            <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="用户名或邮箱"/>
+          <el-form-item prop="id">
+            <el-input  type="text" oninput="value=value.replace(/[^\d]/g,'')" v-model="loginForm.id" auto-complete="off" placeholder="账号"/>
           </el-form-item>
           <el-form-item prop="password">
             <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"/>
@@ -20,9 +20,9 @@
           <el-checkbox class="login_remember" v-model="checked" label-position="left">
             记住密码
           </el-checkbox>
-          <el-form-item style="width: 100%">
-            <el-button type="primary" style="width: 100%" @click="submitClick()">sign in</el-button>
-          </el-form-item>
+          <br/>
+          <el-button type="primary" style="width: 65%" @click="submitClick('loginForm')">登陆</el-button>
+          <el-button type="info" style="width: 30%" @click="checkToReg()">注册</el-button>
         </el-form>
       </div>
     </div>
@@ -30,12 +30,17 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import Cookie from 'js-cookie'
   export default {
     name: "Login",
     data(){
       return {
         rules: {
-          username: [{required: true, message: '请输入用户名' , trigger: 'blur'}],
+          id: [
+            {required: true, message: '请输入用户名' , trigger: 'blur'},
+            {max: 8, message: '账号应该小于8位', trigger: 'blur'}
+          ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
             {min: 6,max: 20, message: '密码应该在6-20位之间', trigger: 'blur'},
@@ -43,7 +48,7 @@
         },
         loading: false,
         loginForm: {
-          username: '',
+          id: '',
           password: '',
         },
         isLoginFail: false,
@@ -51,8 +56,37 @@
       }
     },
     methods: {
-      submitClick() {
-        this.$router.push({path: '/home'});
+      submitClick(formName) {
+        let _this = this
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.axios.post('user/adminLogin',_this.loginForm)
+            .then(function (response){
+              if (response.data.msg){
+                _this.$message.error(response.data.msg)
+                return false;
+              }
+              _this.$store.dispatch('set_token',response.data.token)
+              _this.$store.dispatch('set_userInfo',response.data.data)
+              Cookie.set('token',response.data.token)
+              Cookie.set('userInfo',response.data.data)
+              // console.log(Cookie.get('userInfo'))
+              // console.log(JSON.parse(Cookie.get('userInfo')))
+
+              _this.$router.push({ path: '/home' });
+            }).catch(function (error) {
+              console.log(error)
+              _this.$message.error('出错啦，请联系管理员');
+            })
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      checkToReg() {
+        this.$router.push('register')
       }
     }
   }
