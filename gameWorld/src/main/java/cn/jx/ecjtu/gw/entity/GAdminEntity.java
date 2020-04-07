@@ -8,7 +8,8 @@ import java.util.Objects;
 public class GAdminEntity {
     private String adminId;
     private String gPassword;
-    private int gPermissionLevel;
+    private String gPermissionLevel;
+    private String gUsername;
 
     @Id
     @Column(name = "admin_id")
@@ -32,12 +33,22 @@ public class GAdminEntity {
 
     @Basic
     @Column(name = "g_permission_level")
-    public int getgPermissionLevel() {
+    public String getgPermissionLevel() {
         return gPermissionLevel;
     }
 
-    public void setgPermissionLevel(int gPermissionLevel) {
+    public void setgPermissionLevel(String gPermissionLevel) {
         this.gPermissionLevel = gPermissionLevel;
+    }
+
+    @Basic
+    @Column(name = "g_username")
+    public String getgUsername() {
+        return gUsername;
+    }
+
+    public void setgUsername(String gUsername) {
+        this.gUsername = gUsername;
     }
 
     @Override
@@ -45,13 +56,14 @@ public class GAdminEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GAdminEntity that = (GAdminEntity) o;
-        return gPermissionLevel == that.gPermissionLevel &&
-                Objects.equals(adminId, that.adminId) &&
-                Objects.equals(gPassword, that.gPassword);
+        return Objects.equals(adminId, that.adminId) &&
+                Objects.equals(gPassword, that.gPassword) &&
+                Objects.equals(gPermissionLevel, that.gPermissionLevel) &&
+                Objects.equals(gUsername, that.gUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(adminId, gPassword, gPermissionLevel);
+        return Objects.hash(adminId, gPassword, gPermissionLevel, gUsername);
     }
 }
